@@ -1,5 +1,13 @@
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class Main {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
+        List<String> dictionary = readDictionary();
         System.out.println("Hello world!");
     }
 
@@ -18,10 +26,20 @@ public class Main {
         // show result after each guess
     }
 
-    public static void readDictionary() {
-        // scanner only words with length>4
+    public static List<String> readDictionary() throws IOException {
+        List<String> dictionary = new ArrayList<>();
 
+        // scanner only words with length>4
         // store them to array
+        Scanner scanner = new Scanner(Path.of("russian_nouns.txt"), UTF_8);
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            if (input.length() > 4) {
+                dictionary.add(input);
+            }
+        }
+
+        return dictionary;
     }
 
     public static void getRandomWord() {

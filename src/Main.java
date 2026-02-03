@@ -16,19 +16,24 @@ public class Main {
         System.out.println("Enter the letter: " + inputLetter());
     }
 
-    public static void startGameRound() {
-        // read dictionary
+    public static void startGameLoop() throws IOException {
+        System.out.println("Start new game!");
 
-        // game loop
+        // read dictionary
         // select random word
-        // play round
+        List<String> dictionary = readDictionary();
+        String randomWord = getRandomWord(dictionary);
+
+        while(true){
+            playRound(randomWord);
+        }
     }
 
-    public void playRound() {
-        // round loop
+    public static void playRound(String word) {
         // guess letter
         // check letter presence
         // show result after each guess
+        //String letter = inputLetter();
     }
 
     public static List<String> readDictionary() throws IOException {
@@ -60,16 +65,12 @@ public class Main {
         while (true) {
             String input = scanner.nextLine();
 
-            if(input.matches("[А-Яа-я]")){
+            if (input.matches("[А-Яа-я]")) {
                 return input.toLowerCase();
             } else {
                 System.out.println("Incorrect input. Try again!");
             }
         }
-    }
-
-    public static void containsLetter() {
-        // checks if the word contains provided letter
     }
 
     public static void showResults() {

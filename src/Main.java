@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<String> dictionary = readDictionary();
         System.out.println("Random word: " + getRandomWord(dictionary));
-        System.out.println("Hello world!");
+        System.out.println("Enter the letter: " + inputLetter());
     }
 
     public static void startGameRound() {
@@ -53,8 +53,19 @@ public class Main {
         return dictionary.get(randomInt);
     }
 
-    public static void inputLetter() {
+    public static String inputLetter() {
+        System.out.println("Enter the letter: ");
+
         // user types the letter he wants to check
+        while (true) {
+            String input = scanner.nextLine();
+
+            if(input.matches("[А-Яа-я]")){
+                return input.toLowerCase();
+            } else {
+                System.out.println("Incorrect input. Try again!");
+            }
+        }
     }
 
     public static void containsLetter() {

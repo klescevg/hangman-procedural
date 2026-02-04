@@ -11,29 +11,29 @@ public class Main {
     private static Random random = new Random();
 
     public static void main(String[] args) throws IOException {
-        List<String> dictionary = readDictionary();
-        System.out.println("Random word: " + getRandomWord(dictionary));
-        System.out.println("Enter the letter: " + inputLetter());
+        startGameLoop();
     }
 
     public static void startGameLoop() throws IOException {
-        System.out.println("Start new game!");
+        System.out.println("Welcome to new game!");
 
         // read dictionary
         // select random word
         List<String> dictionary = readDictionary();
         String randomWord = getRandomWord(dictionary);
 
-        while(true){
-            playRound(randomWord);
-        }
+        List <String> correctLetters = new ArrayList<>();
+        List <String> incorrectLetters = new ArrayList<>();
+        int mistakeCount = 0;
+
+        showResults(randomWord, correctLetters, incorrectLetters, mistakeCount);
     }
 
-    public static void playRound(String word) {
+    public static boolean playRound(String randomWord, List<String> correctLetters, List<String> incorrectLetters) {
         // guess letter
         // check letter presence
         // show result after each guess
-        //String letter = inputLetter();
+        return true;
     }
 
     public static List<String> readDictionary() throws IOException {
@@ -59,7 +59,7 @@ public class Main {
     }
 
     public static String inputLetter() {
-        System.out.println("Enter the letter: ");
+        System.out.print("Enter the letter: ");
 
         // user types the letter he wants to check
         while (true) {
@@ -73,11 +73,20 @@ public class Main {
         }
     }
 
-    public static void showResults() {
-        // show mistakes count
-        // show current hangman state
-        // show
+    public static void showResults(String randomWord, List<String> correctLetters, List<String> incorrectLetters, int mistakeCount) {
+        // show current game state
+        // show mistake count
+
+        System.out.print("Word: ");
+        for (int i = 0; i < randomWord.length(); i++) {
+            String characterAtIndex = String.valueOf(randomWord.charAt(i));
+            if (correctLetters.contains(characterAtIndex)){
+                System.out.print(characterAtIndex);
+            } else{
+                System.out.print("_");
+            }
+        }
+        System.out.println();
+        System.out.println("Mistakes (" + mistakeCount + "): " + Arrays.toString(incorrectLetters.toArray()));
     }
-
-
 }

@@ -26,20 +26,45 @@ public class Main {
         List <String> incorrectLetters = new ArrayList<>();
         int mistakeCount = 0;
 
+        playRound(randomWord, correctLetters, incorrectLetters);
         showResults(randomWord, correctLetters, incorrectLetters, mistakeCount);
     }
 
     public static boolean playRound(String randomWord, List<String> correctLetters, List<String> incorrectLetters) {
         // guess letter
         // check letter presence
-        // show result after each guess
+
+        String letter = inputLetter();
+
+        // already tried (wrong)
+        if (incorrectLetters.contains(letter)) {
+            System.out.println("You've already tried this letter");
+            return false;
+        }
+
+        // already revealed (correct)
+        if (correctLetters.contains(letter)) {
+            System.out.println("You've already revealed this letter");
+            return false;
+        }
+
+        // wrong letter
+        if (!randomWord.contains(letter)) {
+            System.out.println("Wrong letter");
+            incorrectLetters.add(letter);
+            return false;
+        }
+
+        // correct letter
+        System.out.println("You are right!");
+        correctLetters.add(letter);
         return true;
     }
 
     public static List<String> readDictionary() throws IOException {
         List<String> dictionary = new ArrayList<>();
 
-        // scanner only words with length>4
+        // read only words with length > 4
         // store them to array
         Scanner scanner = new Scanner(Path.of("russian_nouns.txt"), UTF_8);
         while (scanner.hasNext()) {
@@ -52,8 +77,9 @@ public class Main {
         return dictionary;
     }
 
-    // returns random word from the dictionary
     public static String getRandomWord(List<String> dictionary) {
+        // return random word from the dictionary
+
         int randomInt = random.nextInt(dictionary.size());
         return dictionary.get(randomInt);
     }

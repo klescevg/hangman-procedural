@@ -1,3 +1,5 @@
+package com.klescevg.hangman;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -13,8 +15,6 @@ public class DictionaryReader {
     public static List<String> read() {
         List<String> dictionary = new ArrayList<>();
 
-        // read only words with length > 4
-        // store them to array
         try {
             Scanner dictionaryScanner = new Scanner(Path.of(FILE), UTF_8);
 

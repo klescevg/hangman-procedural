@@ -150,14 +150,13 @@ public class Main {
 
     public static boolean checkWin(String word, Set<String> correctLetters) {
         //check win
-        boolean isWin = true;
 
         for (int i = 0; i < word.length(); i++) {
             if (!correctLetters.contains(String.valueOf(word.charAt(i)))){
-                isWin = false;
+                return false;
             }
         }
 
-        return isWin;
+        return true;
     }
 }

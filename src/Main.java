@@ -1,33 +1,36 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Main {
-    private static int MIN_WORD_SIZE = 4;
-    private static int MAX_MISTAKE_COUNT = 6;
+    private static final int MIN_WORD_SIZE = 4;
+    private static final int MAX_MISTAKE_COUNT = 6;
 
-    private static Scanner scanner = new Scanner(System.in);
-    private static Random random = new Random();
+    private static final Scanner SCANNER = new Scanner(System.in);
+    private static final Random RANDOM = new Random();
+    private static final String REGEX = "[А-ЯЁа-яё]";
+    private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-    public static void main(String[] args) throws IOException {
-        startGameLoop();
+    public static void main(String[] args){
+        startGame();
     }
 
-    public static void startGameLoop() throws IOException {
+    public static void startGame() {
         System.out.println("Welcome to new game!");
 
         // read dictionary
-        // select random word
+        // select RANDOM word
         List<String> dictionary = readDictionary();
         String randomWord = getRandomWord(dictionary);
 
         Set<String> correctLetters = new LinkedHashSet<>();
         Set<String> incorrectLetters = new LinkedHashSet<>();
         int mistakeCount = 0;
-
-        randomWord = "саша";
 
         //game loop
         while (true){
@@ -50,12 +53,12 @@ public class Main {
         }
     }
 
-    public static boolean playRound(String randomWord, Set<String> correctLetters, Set<String> incorrectLetters) {
+    public static boolean playRound(String word, Set<String> correctLetters, Set<String> incorrectLetters) {
         // guess letter
         // check letter presence
 
         while (true) {
-            String letter = inputLetter();
+            String letter = getInputLetter();
 
             // already tried (wrong)
             if (incorrectLetters.contains(letter)) {
@@ -70,7 +73,7 @@ public class Main {
             }
 
             // wrong letter
-            if (!randomWord.contains(letter)) {
+            if (!word.contains(letter)) {
                 System.out.println("Incorrect!");
                 incorrectLetters.add(letter);
                 return false;
@@ -83,37 +86,44 @@ public class Main {
         }
     }
 
-    public static List<String> readDictionary() throws IOException {
+    public static List<String> readDictionary() {
         List<String> dictionary = new ArrayList<>();
 
         // read only words with length > 4
         // store them to array
-        Scanner scanner = new Scanner(Path.of("russian_nouns.txt"), UTF_8);
-        while (scanner.hasNext()) {
-            String input = scanner.nextLine();
-            if (input.length() >= MIN_WORD_SIZE) {
-                dictionary.add(input);
+        try {
+            Scanner dictionaryScanner = new Scanner(Path.of("russian_nouns.txt"), UTF_8);
+
+            while (dictionaryScanner.hasNext()) {
+                String input = dictionaryScanner.nextLine();
+                if (input.length() >= MIN_WORD_SIZE) {
+                    dictionary.add(input);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read dictionary", e);
         }
 
         return dictionary;
     }
 
     public static String getRandomWord(List<String> dictionary) {
-        // return random word from the dictionary
+        // return RANDOM word from the dictionary
 
-        int randomInt = random.nextInt(dictionary.size());
+        int randomInt = RANDOM.nextInt(dictionary.size());
         return dictionary.get(randomInt);
     }
 
-    public static String inputLetter() {
+    public static String getInputLetter() {
         System.out.print("Enter the letter: ");
 
         // user types the letter he wants to check
+        // the game accepts upper and lower case cyrillic letters
         while (true) {
-            String input = scanner.nextLine();
+            String input = SCANNER.nextLine();
 
-            if (input.matches("[А-Яа-я]")) {
+            Matcher matcher = PATTERN.matcher(input);
+            if (matcher.matches()) {
                 return input.toLowerCase();
             } else {
                 System.out.println("Incorrect input. Try again!");
@@ -121,13 +131,13 @@ public class Main {
         }
     }
 
-    public static void showResults(String randomWord, Set<String> correctLetters, Set<String> incorrectLetters, int mistakeCount) {
+    public static void showResults(String word, Set<String> correctLetters, Set<String> incorrectLetters, int mistakeCount) {
         // show current game state
         // show mistake count
 
         System.out.print("\nWord: ");
-        for (int i = 0; i < randomWord.length(); i++) {
-            String characterAtIndex = String.valueOf(randomWord.charAt(i));
+        for (int i = 0; i < word.length(); i++) {
+            String characterAtIndex = String.valueOf(word.charAt(i));
             if (correctLetters.contains(characterAtIndex)) {
                 System.out.print(characterAtIndex);
             } else {
@@ -135,15 +145,15 @@ public class Main {
             }
         }
         System.out.println();
-        System.out.println("Mistakes (" + mistakeCount + "): " + Arrays.toString(incorrectLetters.toArray()));
+        System.out.println(STR."Mistakes (\{mistakeCount}): \{Arrays.toString(incorrectLetters.toArray())}");
     }
 
-    public static boolean checkWin(String randomWord, Set<String> correctLetters) {
+    public static boolean checkWin(String word, Set<String> correctLetters) {
         //check win
         boolean isWin = true;
 
-        for (int i = 0; i < randomWord.length(); i++) {
-            if (!correctLetters.contains(String.valueOf(randomWord.charAt(i)))){
+        for (int i = 0; i < word.length(); i++) {
+            if (!correctLetters.contains(String.valueOf(word.charAt(i)))){
                 isWin = false;
             }
         }

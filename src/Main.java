@@ -6,6 +6,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Main {
     private static int MIN_WORD_SIZE = 4;
+    private static int MAX_MISTAKE_COUNT = 6;
 
     private static Scanner scanner = new Scanner(System.in);
     private static Random random = new Random();
@@ -22,15 +23,12 @@ public class Main {
         List<String> dictionary = readDictionary();
         String randomWord = getRandomWord(dictionary);
 
-        List <String> correctLetters = new ArrayList<>();
-        List <String> incorrectLetters = new ArrayList<>();
+        Set<String> correctLetters = new LinkedHashSet<>();
+        Set<String> incorrectLetters = new LinkedHashSet<>();
         int mistakeCount = 0;
-
-        playRound(randomWord, correctLetters, incorrectLetters);
-        showResults(randomWord, correctLetters, incorrectLetters, mistakeCount);
     }
 
-    public static boolean playRound(String randomWord, List<String> correctLetters, List<String> incorrectLetters) {
+    public static boolean playRound(String randomWord, Set<String> correctLetters, Set<String> incorrectLetters) {
         // guess letter
         // check letter presence
 
@@ -99,20 +97,32 @@ public class Main {
         }
     }
 
-    public static void showResults(String randomWord, List<String> correctLetters, List<String> incorrectLetters, int mistakeCount) {
+    public static void showResults(String randomWord, Set<String> correctLetters, Set<String> incorrectLetters, int mistakeCount) {
         // show current game state
         // show mistake count
 
         System.out.print("Word: ");
         for (int i = 0; i < randomWord.length(); i++) {
             String characterAtIndex = String.valueOf(randomWord.charAt(i));
-            if (correctLetters.contains(characterAtIndex)){
+            if (correctLetters.contains(characterAtIndex)) {
                 System.out.print(characterAtIndex);
-            } else{
+            } else {
                 System.out.print("_");
             }
         }
         System.out.println();
         System.out.println("Mistakes (" + mistakeCount + "): " + Arrays.toString(incorrectLetters.toArray()));
+    }
+
+    public static boolean checkWin(String randomWord, Set<String> correctLetters) {
+        //check win
+
+        for (int i = 0; i < randomWord.length(); i++) {
+            if (!correctLetters.contains(String.valueOf(randomWord.charAt(i)))){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -12,7 +12,11 @@ public class Main {
     private static final String REGEX = "[А-ЯЁа-яё]";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-    public static void main(String[] args){
+    private static String word;
+    private static final Set<String> correctLetters = new LinkedHashSet<>();
+    private static final Set<String> incorrectLetters = new LinkedHashSet<>();
+
+    public static void main(String[] args) {
         startGame();
     }
 
@@ -20,33 +24,26 @@ public class Main {
         System.out.println("Welcome to new game!");
 
         List<String> dictionary = DictionaryReader.read();
-        String randomWord = getRandomWord(dictionary);
+        word = getRandomWord(dictionary);
+        word = "саша";
 
-        Set<String> correctLetters = new LinkedHashSet<>();
-        Set<String> incorrectLetters = new LinkedHashSet<>();
-        int mistakeCount = 0;
+        while (true) {
+            playRound();
+            showResults();
 
-        while (true){
-            boolean roundResult = playRound(randomWord, correctLetters, incorrectLetters);
-            if (!roundResult){
-                mistakeCount++;
-            }
-
-            showResults(randomWord, correctLetters, incorrectLetters, mistakeCount);
-
-            if (mistakeCount == MAX_MISTAKE_COUNT){
+            if (incorrectLetters.size() == MAX_MISTAKE_COUNT) {
                 System.out.println("You lost!");
                 break;
             }
 
-            if(checkWin(randomWord, correctLetters)){
+            if (checkWin()) {
                 System.out.println("You won!");
                 break;
             }
         }
     }
 
-    public static boolean playRound(String word, Set<String> correctLetters, Set<String> incorrectLetters) {
+    public static void playRound() {
         while (true) {
             String letter = getInputLetter();
 
@@ -63,12 +60,12 @@ public class Main {
             if (!word.contains(letter)) {
                 System.out.println("Incorrect!");
                 incorrectLetters.add(letter);
-                return false;
+                break;
             }
 
             System.out.println("You are right!");
             correctLetters.add(letter);
-            return true;
+            break;
         }
     }
 
@@ -93,7 +90,7 @@ public class Main {
         }
     }
 
-    public static void showResults(String word, Set<String> correctLetters, Set<String> incorrectLetters, int mistakeCount) {
+    public static void showResults() {
         System.out.print("\nWord: ");
 
         for (int i = 0; i < word.length(); i++) {
@@ -106,13 +103,12 @@ public class Main {
         }
 
         System.out.println();
-        System.out.println(STR."Mistakes (\{mistakeCount}): \{Arrays.toString(incorrectLetters.toArray())}");
+        System.out.println(STR."Mistakes (\{incorrectLetters.size()}): \{Arrays.toString(incorrectLetters.toArray())}");
     }
 
-    public static boolean checkWin(String word, Set<String> correctLetters) {
-
+    public static boolean checkWin() {
         for (int i = 0; i < word.length(); i++) {
-            if (!correctLetters.contains(String.valueOf(word.charAt(i)))){
+            if (!correctLetters.contains(String.valueOf(word.charAt(i)))) {
                 return false;
             }
         }

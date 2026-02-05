@@ -26,37 +26,61 @@ public class Main {
         Set<String> correctLetters = new LinkedHashSet<>();
         Set<String> incorrectLetters = new LinkedHashSet<>();
         int mistakeCount = 0;
+
+        randomWord = "саша";
+
+        //game loop
+        while (true){
+            boolean roundResult = playRound(randomWord, correctLetters, incorrectLetters);
+            if (!roundResult){
+                mistakeCount++;
+            }
+
+            showResults(randomWord, correctLetters, incorrectLetters, mistakeCount);
+
+            if (mistakeCount == MAX_MISTAKE_COUNT){
+                System.out.println("You lost!");
+                break;
+            }
+
+            if(checkWin(randomWord, correctLetters)){
+                System.out.println("You won!");
+                break;
+            }
+        }
     }
 
     public static boolean playRound(String randomWord, Set<String> correctLetters, Set<String> incorrectLetters) {
         // guess letter
         // check letter presence
 
-        String letter = inputLetter();
+        while (true) {
+            String letter = inputLetter();
 
-        // already tried (wrong)
-        if (incorrectLetters.contains(letter)) {
-            System.out.println("You've already tried this letter");
-            return false;
+            // already tried (wrong)
+            if (incorrectLetters.contains(letter)) {
+                System.out.println("You've already tried this letter!");
+                continue;
+            }
+
+            // already revealed (correct)
+            if (correctLetters.contains(letter)) {
+                System.out.println("You've already revealed this letter!");
+                continue;
+            }
+
+            // wrong letter
+            if (!randomWord.contains(letter)) {
+                System.out.println("Incorrect!");
+                incorrectLetters.add(letter);
+                return false;
+            }
+
+            // correct letter
+            System.out.println("You are right!");
+            correctLetters.add(letter);
+            return true;
         }
-
-        // already revealed (correct)
-        if (correctLetters.contains(letter)) {
-            System.out.println("You've already revealed this letter");
-            return false;
-        }
-
-        // wrong letter
-        if (!randomWord.contains(letter)) {
-            System.out.println("Wrong letter");
-            incorrectLetters.add(letter);
-            return false;
-        }
-
-        // correct letter
-        System.out.println("You are right!");
-        correctLetters.add(letter);
-        return true;
     }
 
     public static List<String> readDictionary() throws IOException {
@@ -101,7 +125,7 @@ public class Main {
         // show current game state
         // show mistake count
 
-        System.out.print("Word: ");
+        System.out.print("\nWord: ");
         for (int i = 0; i < randomWord.length(); i++) {
             String characterAtIndex = String.valueOf(randomWord.charAt(i));
             if (correctLetters.contains(characterAtIndex)) {
@@ -116,13 +140,14 @@ public class Main {
 
     public static boolean checkWin(String randomWord, Set<String> correctLetters) {
         //check win
+        boolean isWin = true;
 
         for (int i = 0; i < randomWord.length(); i++) {
             if (!correctLetters.contains(String.valueOf(randomWord.charAt(i)))){
-                return false;
+                isWin = false;
             }
         }
 
-        return true;
+        return isWin;
     }
 }

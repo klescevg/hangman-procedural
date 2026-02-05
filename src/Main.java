@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Main {
-    private static final int MIN_WORD_SIZE = 4;
     private static final int MAX_MISTAKE_COUNT = 6;
 
     private static final Scanner SCANNER = new Scanner(System.in);
@@ -25,7 +24,7 @@ public class Main {
 
         // read dictionary
         // select RANDOM word
-        List<String> dictionary = readDictionary();
+        List<String> dictionary = DictionaryReader.read();
         String randomWord = getRandomWord(dictionary);
 
         Set<String> correctLetters = new LinkedHashSet<>();
@@ -84,27 +83,6 @@ public class Main {
             correctLetters.add(letter);
             return true;
         }
-    }
-
-    public static List<String> readDictionary() {
-        List<String> dictionary = new ArrayList<>();
-
-        // read only words with length > 4
-        // store them to array
-        try {
-            Scanner dictionaryScanner = new Scanner(Path.of("russian_nouns.txt"), UTF_8);
-
-            while (dictionaryScanner.hasNext()) {
-                String input = dictionaryScanner.nextLine();
-                if (input.length() >= MIN_WORD_SIZE) {
-                    dictionary.add(input);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot read dictionary", e);
-        }
-
-        return dictionary;
     }
 
     public static String getRandomWord(List<String> dictionary) {

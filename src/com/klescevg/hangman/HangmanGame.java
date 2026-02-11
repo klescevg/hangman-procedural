@@ -30,13 +30,17 @@ public class HangmanGame {
     public static void playRound() {
         char letter = getNewLetter();
 
-        if (word.indexOf(letter) < 0) {
+        if (!wordContains(letter)) {
             System.out.println("Incorrect!");
             incorrectLetters.add(letter);
         } else {
             System.out.println("You are right!");
             correctLetters.add(letter);
         }
+    }
+
+    public static boolean wordContains(char letter) {
+        return word.indexOf(letter) >= 0;
     }
 
     public static String getRandomWord(List<String> words) {
@@ -88,7 +92,7 @@ public class HangmanGame {
             }
         }
 
-        System.out.println("\nMistakes (" + incorrectLetters.size() + "): " + Arrays.toString(incorrectLetters.toArray()));
+        System.out.printf("\nMistakes (%d): %s \n", incorrectLetters.size(), Arrays.toString(incorrectLetters.toArray()));
     }
 
     public static boolean isGameOver() {

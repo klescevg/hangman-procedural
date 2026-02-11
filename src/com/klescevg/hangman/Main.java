@@ -17,24 +17,22 @@ public class Main {
     private static final Set<String> incorrectLetters = new LinkedHashSet<>();
 
     public static void main(String[] args) {
-        startGame();
+        playGame();
     }
 
-    public static void startGame() {
+    public static void playGame() {
         System.out.println("Welcome to new game!");
 
         List<String> dictionary = DictionaryReader.read();
         word = getRandomWord(dictionary);
         word = "саша";
 
-        while (true) {
-            if (isGameOver()) {
-                break;
-            }
-
-            showResults();
+        while (!isGameOver()) {
+            showRoundResults();
             playRound();
         }
+
+        showGameResults();
     }
 
     public static void playRound() {
@@ -84,11 +82,12 @@ public class Main {
         }
     }
 
-    public static void showResults() {
+    public static void showRoundResults() {
         System.out.print("\nWord: ");
 
         for (int i = 0; i < word.length(); i++) {
             String characterAtIndex = String.valueOf(word.charAt(i));
+
             if (correctLetters.contains(characterAtIndex)) {
                 System.out.print(characterAtIndex);
             } else {
@@ -96,8 +95,7 @@ public class Main {
             }
         }
 
-        System.out.println();
-        System.out.println(STR."Mistakes (\{incorrectLetters.size()}): \{Arrays.toString(incorrectLetters.toArray())}");
+        System.out.println("\nMistakes (" + incorrectLetters.size() + "): " + Arrays.toString(incorrectLetters.toArray()));
     }
 
     public static boolean isGameOver() {
@@ -111,16 +109,21 @@ public class Main {
             }
         }
 
-        System.out.println("\nYou won!");
         return true;
     }
 
     public static boolean isLose() {
-        if (incorrectLetters.size() == MAX_MISTAKE_COUNT) {
-            System.out.println("\nYou lost...");
-            return true;
-        }
+        return incorrectLetters.size() == MAX_MISTAKE_COUNT;
+    }
 
-        return false;
+    public static void showGameResults() {
+        System.out.println();
+        if (isWin()) {
+            System.out.println("You won! The word is " + word);
+        } else if (isLose()) {
+            System.out.println("You lost... The word is " + word);
+        } else {
+            System.out.println("Game is not finished");
+        }
     }
 }

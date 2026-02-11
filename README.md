@@ -5,7 +5,7 @@ Welcome to the Hangman game project. This is a simplified version of the classic
 
 ## Features
 - Simple English-language interface
-- Dictionary file contains only Russian words
+- Dictionary file contains only English words
 - User input validation
 - No visual representation of the hangman
 

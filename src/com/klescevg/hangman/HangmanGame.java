@@ -13,8 +13,8 @@ public class HangmanGame {
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
     private static String word;
-    private static final Set<String> correctLetters = new LinkedHashSet<>();
-    private static final Set<String> incorrectLetters = new LinkedHashSet<>();
+    private static final Set<Character> correctLetters = new LinkedHashSet<>();
+    private static final Set<Character> incorrectLetters = new LinkedHashSet<>();
 
     public static void playGame(List<String> words) {
         System.out.println("Welcome to new game!");
@@ -31,7 +31,7 @@ public class HangmanGame {
 
     public static void playRound() {
         while (true) {
-            String letter = getInputLetter();
+            char letter = getInputLetter();
 
             if (incorrectLetters.contains(letter)) {
                 System.out.println("You've already tried this letter!");
@@ -43,7 +43,7 @@ public class HangmanGame {
                 continue;
             }
 
-            if (!word.contains(letter)) {
+            if (!word.contains(Character.toString(letter))) {
                 System.out.println("Incorrect!");
                 incorrectLetters.add(letter);
                 break;
@@ -61,15 +61,14 @@ public class HangmanGame {
         return dictionary.get(randomInt);
     }
 
-    public static String getInputLetter() {
+    public static char getInputLetter() {
         System.out.print("Enter the letter: ");
 
         while (true) {
-            String input = SCANNER.nextLine();
+            String input = SCANNER.nextLine().trim();
 
-            Matcher matcher = PATTERN.matcher(input);
-            if (matcher.matches()) {
-                return input.toLowerCase();
+            if (PATTERN.matcher(input).matches()) {
+                return Character.toLowerCase(input.charAt(0));
             } else {
                 System.out.print("Incorrect input! Try again: ");
             }
@@ -80,10 +79,8 @@ public class HangmanGame {
         System.out.print("\nWord: ");
 
         for (int i = 0; i < word.length(); i++) {
-            String characterAtIndex = String.valueOf(word.charAt(i));
-
-            if (correctLetters.contains(characterAtIndex)) {
-                System.out.print(characterAtIndex);
+            if (correctLetters.contains(word.charAt(i))) {
+                System.out.print(word.charAt(i));
             } else {
                 System.out.print("_");
             }
@@ -98,7 +95,7 @@ public class HangmanGame {
 
     public static boolean isWin() {
         for (int i = 0; i < word.length(); i++) {
-            if (!correctLetters.contains(String.valueOf(word.charAt(i)))) {
+            if (!correctLetters.contains(word.charAt(i))) {
                 return false;
             }
         }

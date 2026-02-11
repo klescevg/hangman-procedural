@@ -28,18 +28,12 @@ public class Main {
         word = "саша";
 
         while (true) {
-            playRound();
+            if (isGameOver()) {
+                break;
+            }
+
             showResults();
-
-            if (incorrectLetters.size() == MAX_MISTAKE_COUNT) {
-                System.out.println("You lost!");
-                break;
-            }
-
-            if (checkWin()) {
-                System.out.println("You won!");
-                break;
-            }
+            playRound();
         }
     }
 
@@ -85,7 +79,7 @@ public class Main {
             if (matcher.matches()) {
                 return input.toLowerCase();
             } else {
-                System.out.println("Incorrect input. Try again!");
+                System.out.print("Incorrect input! Try again: ");
             }
         }
     }
@@ -106,13 +100,27 @@ public class Main {
         System.out.println(STR."Mistakes (\{incorrectLetters.size()}): \{Arrays.toString(incorrectLetters.toArray())}");
     }
 
-    public static boolean checkWin() {
+    public static boolean isGameOver() {
+        return isWin() || isLose();
+    }
+
+    public static boolean isWin() {
         for (int i = 0; i < word.length(); i++) {
             if (!correctLetters.contains(String.valueOf(word.charAt(i)))) {
                 return false;
             }
         }
 
+        System.out.println("\nYou won!");
         return true;
+    }
+
+    public static boolean isLose() {
+        if (incorrectLetters.size() == MAX_MISTAKE_COUNT) {
+            System.out.println("\nYou lost...");
+            return true;
+        }
+
+        return false;
     }
 }

@@ -27,7 +27,7 @@ public class HangmanGame {
         showGameResults();
     }
 
-    public static void playRound() {
+    private static void playRound() {
         char letter = getNewLetter();
 
         if (!wordContains(letter)) {
@@ -39,17 +39,17 @@ public class HangmanGame {
         }
     }
 
-    public static boolean wordContains(char letter) {
+    private static boolean wordContains(char letter) {
         return word.indexOf(letter) >= 0;
     }
 
-    public static String getRandomWord(List<String> words) {
+    private static String getRandomWord(List<String> words) {
         int randomInt = RANDOM.nextInt(words.size());
 
         return words.get(randomInt);
     }
 
-    public static char getInputLetter() {
+    private static char getInputLetter() {
         System.out.print("Enter the letter: ");
 
         while (true) {
@@ -63,7 +63,7 @@ public class HangmanGame {
         }
     }
 
-    public static char getNewLetter() {
+    private static char getNewLetter() {
         while (true) {
             char letter = getInputLetter();
 
@@ -81,7 +81,7 @@ public class HangmanGame {
         }
     }
 
-    public static void showRoundResults() {
+    private static void showRoundResults() {
         System.out.print("\nWord: ");
 
         for (int i = 0; i < word.length(); i++) {
@@ -95,11 +95,11 @@ public class HangmanGame {
         System.out.printf("\nMistakes (%d): %s \n", incorrectLetters.size(), Arrays.toString(incorrectLetters.toArray()));
     }
 
-    public static boolean isGameOver() {
+    private static boolean isGameOver() {
         return isWin() || isLose();
     }
 
-    public static boolean isWin() {
+    private static boolean isWin() {
         for (int i = 0; i < word.length(); i++) {
             if (!correctLetters.contains(word.charAt(i))) {
                 return false;
@@ -109,11 +109,11 @@ public class HangmanGame {
         return true;
     }
 
-    public static boolean isLose() {
+    private static boolean isLose() {
         return incorrectLetters.size() == MAX_MISTAKE_COUNT;
     }
 
-    public static void showGameResults() {
+    private static void showGameResults() {
         System.out.println();
         if (isWin()) {
             System.out.println("You won! The word is " + word);

@@ -25,7 +25,8 @@ public class DictionaryReader {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read dictionary", e);
+            System.err.println("Cannot read dictionary file: " + FILE);
+            System.exit(1);
         }
 
         return dictionary;

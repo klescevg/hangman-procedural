@@ -1,7 +1,6 @@
 package com.klescevg.hangman;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HangmanGame {
@@ -9,8 +8,7 @@ public class HangmanGame {
 
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random RANDOM = new Random();
-    private static final String REGEX = "[А-ЯЁа-яё]";
-    private static final Pattern PATTERN = Pattern.compile(REGEX);
+    private static final Pattern LETTER_PATTERN = Pattern.compile("[А-ЯЁа-яё]");
 
     private static String word;
     private static final Set<Character> correctLetters = new LinkedHashSet<>();
@@ -30,35 +28,21 @@ public class HangmanGame {
     }
 
     public static void playRound() {
-        while (true) {
-            char letter = getInputLetter();
+        char letter = getNewLetter();
 
-            if (incorrectLetters.contains(letter)) {
-                System.out.println("You've already tried this letter!");
-                continue;
-            }
-
-            if (correctLetters.contains(letter)) {
-                System.out.println("You've already revealed this letter!");
-                continue;
-            }
-
-            if (!word.contains(Character.toString(letter))) {
-                System.out.println("Incorrect!");
-                incorrectLetters.add(letter);
-                break;
-            }
-
+        if (word.indexOf(letter) < 0) {
+            System.out.println("Incorrect!");
+            incorrectLetters.add(letter);
+        } else {
             System.out.println("You are right!");
             correctLetters.add(letter);
-            break;
         }
     }
 
-    public static String getRandomWord(List<String> dictionary) {
-        int randomInt = RANDOM.nextInt(dictionary.size());
+    public static String getRandomWord(List<String> words) {
+        int randomInt = RANDOM.nextInt(words.size());
 
-        return dictionary.get(randomInt);
+        return words.get(randomInt);
     }
 
     public static char getInputLetter() {
@@ -67,11 +51,29 @@ public class HangmanGame {
         while (true) {
             String input = SCANNER.nextLine().trim();
 
-            if (PATTERN.matcher(input).matches()) {
+            if (LETTER_PATTERN.matcher(input).matches()) {
                 return Character.toLowerCase(input.charAt(0));
             } else {
                 System.out.print("Incorrect input! Try again: ");
             }
+        }
+    }
+
+    public static char getNewLetter() {
+        while (true) {
+            char letter = getInputLetter();
+
+            if (correctLetters.contains(letter)) {
+                System.out.println("You've already revealed this letter!");
+                continue;
+            }
+
+            if (incorrectLetters.contains(letter)) {
+                System.out.println("You've already tried this letter!");
+                continue;
+            }
+
+            return letter;
         }
     }
 

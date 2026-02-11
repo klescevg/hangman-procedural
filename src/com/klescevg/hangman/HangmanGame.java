@@ -8,7 +8,7 @@ public class HangmanGame {
 
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random RANDOM = new Random();
-    private static final Pattern LETTER_PATTERN = Pattern.compile("[А-ЯЁа-яё]");
+    private static final Pattern LETTER_PATTERN = Pattern.compile("[A-Za-z]");
 
     private static String word;
     private static final Set<Character> correctLetters = new LinkedHashSet<>();

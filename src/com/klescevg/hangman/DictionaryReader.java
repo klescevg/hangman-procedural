@@ -14,9 +14,10 @@ public class DictionaryReader {
 
     public static List<String> read() {
         List<String> dictionary = new ArrayList<>();
+        Path dictionaryPath = Path.of(FILE);
 
         try {
-            Scanner dictionaryScanner = new Scanner(Path.of(FILE), UTF_8);
+            Scanner dictionaryScanner = new Scanner(dictionaryPath, UTF_8);
 
             while (dictionaryScanner.hasNext()) {
                 String input = dictionaryScanner.nextLine();
@@ -25,7 +26,8 @@ public class DictionaryReader {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Cannot read dictionary file: " + FILE);
+            System.err.println("Cannot read dictionary file: ");
+            System.err.println(dictionaryPath.toAbsolutePath());
             System.exit(1);
         }
 

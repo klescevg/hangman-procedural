@@ -16,19 +16,15 @@ public class DictionaryReader {
         List<String> dictionary = new ArrayList<>();
         Path dictionaryPath = Path.of(FILE);
 
-        try {
-            Scanner dictionaryScanner = new Scanner(dictionaryPath, UTF_8);
-
-            while (dictionaryScanner.hasNext()) {
+        try (Scanner dictionaryScanner = new Scanner(dictionaryPath, UTF_8);){
+            while (dictionaryScanner.hasNextLine()) {
                 String input = dictionaryScanner.nextLine();
                 if (input.length() >= MIN_WORD_SIZE) {
                     dictionary.add(input);
                 }
             }
         } catch (IOException e) {
-            System.err.println("Cannot read dictionary file: ");
-            System.err.println(dictionaryPath.toAbsolutePath());
-            System.exit(1);
+            throw new IllegalArgumentException("Cannot read dictionary file: " + dictionaryPath.toAbsolutePath(), e);
         }
 
         return dictionary;

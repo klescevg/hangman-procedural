@@ -10,9 +10,9 @@ public class HangmanGame {
     private static final Random RANDOM = new Random();
     private static final Pattern LETTER_PATTERN = Pattern.compile("[A-Za-z]");
 
-    private static String word;
     private static final Set<Character> correctLetters = new LinkedHashSet<>();
     private static final Set<Character> incorrectLetters = new LinkedHashSet<>();
+    private static String word;
 
     public static void playGame(List<String> words) {
         System.out.println("Welcome to new game!");
@@ -39,6 +39,24 @@ public class HangmanGame {
         }
     }
 
+    private static boolean isGameOver() {
+        return isWin() || isLose();
+    }
+
+    private static boolean isWin() {
+        for (int i = 0; i < word.length(); i++) {
+            if (!correctLetters.contains(word.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean isLose() {
+        return incorrectLetters.size() == MAX_MISTAKE_COUNT;
+    }
+
     private static boolean wordContains(char letter) {
         return word.indexOf(letter) >= 0;
     }
@@ -47,20 +65,6 @@ public class HangmanGame {
         int randomInt = RANDOM.nextInt(words.size());
 
         return words.get(randomInt);
-    }
-
-    private static char getInputLetter() {
-        System.out.print("Enter the letter: ");
-
-        while (true) {
-            String input = SCANNER.nextLine().trim();
-
-            if (LETTER_PATTERN.matcher(input).matches()) {
-                return Character.toLowerCase(input.charAt(0));
-            } else {
-                System.out.print("Incorrect input! Try again: ");
-            }
-        }
     }
 
     private static char getNewLetter() {
@@ -81,6 +85,20 @@ public class HangmanGame {
         }
     }
 
+    private static char getInputLetter() {
+        System.out.print("Enter the letter: ");
+
+        while (true) {
+            String input = SCANNER.nextLine().trim();
+
+            if (LETTER_PATTERN.matcher(input).matches()) {
+                return Character.toLowerCase(input.charAt(0));
+            } else {
+                System.out.print("Incorrect input! Try again: ");
+            }
+        }
+    }
+
     private static void showRoundResults() {
         System.out.print("\nWord: ");
 
@@ -93,24 +111,6 @@ public class HangmanGame {
         }
 
         System.out.printf("\nMistakes (%d): %s \n", incorrectLetters.size(), Arrays.toString(incorrectLetters.toArray()));
-    }
-
-    private static boolean isGameOver() {
-        return isWin() || isLose();
-    }
-
-    private static boolean isWin() {
-        for (int i = 0; i < word.length(); i++) {
-            if (!correctLetters.contains(word.charAt(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static boolean isLose() {
-        return incorrectLetters.size() == MAX_MISTAKE_COUNT;
     }
 
     private static void showGameResults() {
